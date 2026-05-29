@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bulk UserID & Ticket Generator</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Consolas,monospace;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920')
+    center center/cover no-repeat fixed;
+}
+
+.container{
+    width:100%;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:24px;
+
+    box-shadow:0 8px 32px rgba(0,0,0,0.35);
+    overflow:hidden;
+}
+
+.header{
+    background:rgba(107,114,128,0.85);
+    backdrop-filter:blur(10px);
+
+    color:#fff;
+    text-align:center;
+    padding:18px;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.content{
+    padding:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+@media(max-width:768px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+
+h3{
+    color:#fff;
+    margin-bottom:10px;
+}
+
+textarea{
+    width:100%;
+    height:320px;
+    background:rgba(255,255,255,0.05);
+
+    backdrop-filter:blur(5px);
+    -webkit-backdrop-filter:blur(5px);
+
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:14px;
+
+    color:#fff;
+    padding:15px;
+
+    resize:none;
+    outline:none;
+}
+
+textarea::placeholder{
+    color:rgba(255,255,255,0.55);
+}
+
+textarea:focus{
+    border-color:#9ca3af;
+}
+
+.buttons{
+    margin-top:20px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    border-radius:12px;
+    padding:12px 20px;
+    cursor:pointer;
+    font-weight:bold;
+    color:#fff;
+}
+
+.generate{
+    background:#6b7280;
+}
+
+.copy{
+    background:#4b5563;
+}
+
+.clear{
+    background:#374151;
+}
+
+.bg-btn{
+    position:fixed;
+    top:20px;
+    right:20px;
+
+    background:rgba(107,114,128,0.9);
+
+    color:#fff;
+    border:none;
+    border-radius:12px;
+
+    padding:12px 18px;
+    cursor:pointer;
+
+    backdrop-filter:blur(10px);
+}
+
+.counter{
+    margin-top:15px;
+    color:#fff;
+}
+
+.output{
+    margin-top:15px;
+
+    background:rgba(255,255,255,0.05);
+
+    backdrop-filter:blur(5px);
+    -webkit-backdrop-filter:blur(5px);
+
+    border:1px solid rgba(255,255,255,0.10);
+
+    border-radius:14px;
+    padding:15px;
+
+    min-height:250px;
+
+    color:#f3f4f6;
+    white-space:pre-wrap;
+    overflow:auto;
+}
+
+.footer{
+    margin-top:15px;
+    text-align:center;
+    color:rgba(255,255,255,0.75);
+}
+
+.toast{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+
+    background:#4b5563;
+    color:#fff;
+
+    padding:12px 20px;
+    border-radius:12px;
+
+    z-index:9999;
+
+    animation:fade .3s ease;
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+</style>
+</head>
+<body>
+
+<input type="file" id="bgUpload" accept="image/*" hidden>
+
+<button class="bg-btn"
+onclick="document.getElementById('bgUpload').click()">
+📷 Ganti Background
+</button>
+
+<div class="container">
+<div class="card">
+
+<div class="header">
+Bulk UserID & Ticket Generator
+</div>
+
+<div class="content">
+
+<div class="grid">
+
+<div>
+<h3>User ID</h3>
+<textarea id="userid"
+placeholder="Masukkan 1 User ID per baris"></textarea>
+</div>
+
+<div>
+<h3>Kode Tiket</h3>
+<textarea id="txid"
+placeholder="Masukkan 1 Kode Tiket per baris"></textarea>
+</div>
+
+</div>
+
+<div class="buttons">
+
+<button class="generate"
+onclick="generateData()">
+⚡ Generate
+</button>
+
+<button class="copy"
+id="copyBtn"
+onclick="copyResult()">
+📋 Copy Hasil
+</button>
+
+<button class="clear"
+onclick="clearAll()">
+🗑 Hapus Semua
+</button>
+
+</div>
+
+<div class="counter" id="counter">
+Total Data : 0
+</div>
+
+<div class="output" id="hasil"></div>
+
+<div class="footer">
+Format Output : userid, kode_tiket
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+
+function generateData(){
+
+    let users = document.getElementById('userid')
+    .value.split('\n')
+    .map(x => x.trim())
+    .filter(x => x !== '');
+
+    let txids = document.getElementById('txid')
+    .value.split('\n')
+    .map(x => x.trim())
+    .filter(x => x !== '');
+
+    if(users.length !== txids.length){
+        showToast('Jumlah User ID dan Kode Tiket harus sama');
+        return;
+    }
+
+    let hasil = [];
+
+    for(let i=0;i<users.length;i++){
+        hasil.push(users[i] + ', ' + txids[i]);
+    }
+
+    document.getElementById('hasil').textContent =
+    hasil.join('\n');
+
+    document.getElementById('counter').textContent =
+    'Total Data : ' + hasil.length;
+
+    showToast('✅ Data berhasil dibuat');
+}
+
+async function copyResult(){
+
+    const text =
+    document.getElementById('hasil').textContent;
+
+    if(text === '') return;
+
+    await navigator.clipboard.writeText(text);
+
+    const btn =
+    document.getElementById('copyBtn');
+
+    const oldText = btn.innerHTML;
+
+    btn.innerHTML = '✅ Dicopy';
+
+    setTimeout(()=>{
+        btn.innerHTML = oldText;
+    },2000);
+
+    showToast('📋 Berhasil dicopy');
+}
+
+function clearAll(){
+
+    document.getElementById('userid').value='';
+    document.getElementById('txid').value='';
+    document.getElementById('hasil').textContent='';
+    document.getElementById('counter').textContent='Total Data : 0';
+
+    showToast('🗑 Data dihapus');
+}
+
+function showToast(message){
+
+    const toast = document.createElement('div');
+
+    toast.className='toast';
+    toast.innerHTML=message;
+
+    document.body.appendChild(toast);
+
+    setTimeout(()=>{
+        toast.remove();
+    },2000);
+}
+
+document.getElementById('bgUpload')
+.addEventListener('change',function(e){
+
+    const file = e.target.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event){
+
+        document.body.style.background =
+        `url(${event.target.result}) center center/cover no-repeat fixed`;
+
+        showToast('📷 Background diganti');
+    };
+
+    reader.readAsDataURL(file);
+});
+
+</script>
+
+</body>
+</html>
