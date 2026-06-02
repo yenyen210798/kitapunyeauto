@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pencatatan Auto</title>
+<title>Bulk UserID & Ticket Generator</title>
 
 <style>
 
@@ -21,7 +21,7 @@ body{
     align-items:center;
     padding:20px;
 
-    background:url('https://i.pinimg.com/1200x/c1/fe/7f/c1fe7fb91e93b8c70e331bb7b736df7f.jpg')
+    background:url('https://images.unsplash.com/photo-1519681393784-d120267933ba')
     center center/cover no-repeat fixed;
 }
 
@@ -31,13 +31,29 @@ body{
 }
 
 .card{
-    background:rgba(40,40,40,0.45);
-    backdrop-filter:blur(8px);
-    -webkit-backdrop-filter:blur(8px);
+    background:rgba(255,255,255,0.06);
+
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+
+    border:1px solid rgba(255,255,255,0.15);
+
+    border-radius:24px;
+
+    box-shadow:0 8px 32px rgba(0,0,0,.3);
+
+    overflow:hidden;
 }
 
 .header{
-    background:rgba(55,55,55,0.8);
+    background:rgba(255,45,122,.85);
+    backdrop-filter:blur(10px);
+
+    color:#fff;
+    text-align:center;
+    padding:18px;
+    font-size:24px;
+    font-weight:bold;
 }
 
 .content{
@@ -107,11 +123,11 @@ button{
 }
 
 .generate{
-    background:#FF8DA1;
+    background:#22c55e;
 }
 
 .copy{
-    background:#B660CD;
+    background:#3b82f6;
 }
 
 .clear{
@@ -197,6 +213,7 @@ button{
 
 </style>
 </head>
+
 <body>
 
 <input type="file" id="bgUpload" accept="image/*" hidden>
@@ -207,10 +224,11 @@ onclick="document.getElementById('bgUpload').click()">
 </button>
 
 <div class="container">
+
 <div class="card">
 
 <div class="header">
-Pencatatan Auto
+Bulk UserID & Ticket Generator
 </div>
 
 <div class="content">
@@ -220,13 +238,13 @@ Pencatatan Auto
 <div>
 <h3>User ID</h3>
 <textarea id="userid"
-placeholder="Masukkan 1 User ID per baris"></textarea>
+placeholder="1 User ID per baris"></textarea>
 </div>
 
 <div>
 <h3>Kode Tiket</h3>
 <textarea id="txid"
-placeholder="Masukkan 1 Kode Tiket per baris"></textarea>
+placeholder="1 Kode Tiket per baris"></textarea>
 </div>
 
 </div>
@@ -262,32 +280,46 @@ Format Output : userid, kode_tiket
 </div>
 
 </div>
+
 </div>
+
 </div>
 
 <script>
 
 function generateData(){
 
-    let users = document.getElementById('userid')
-    .value.split('\n')
-    .map(x => x.trim())
-    .filter(x => x !== '');
+    let users =
+    document.getElementById('userid')
+    .value
+    .split('\n')
+    .map(x=>x.trim())
+    .filter(x=>x!=='');
 
-    let txids = document.getElementById('txid')
-    .value.split('\n')
-    .map(x => x.trim())
-    .filter(x => x !== '');
+    let txids =
+    document.getElementById('txid')
+    .value
+    .split('\n')
+    .map(x=>x.trim())
+    .filter(x=>x!=='');
 
     if(users.length !== txids.length){
-        showToast('Jumlah User ID dan Kode Tiket harus sama');
+
+        showToast(
+        'Jumlah User ID dan Kode Tiket harus sama'
+        );
+
         return;
     }
 
-    let hasil = [];
+    let hasil=[];
 
     for(let i=0;i<users.length;i++){
-        hasil.push(users[i] + ', ' + txids[i]);
+
+        hasil.push(
+        users[i] + ', ' + txids[i]
+        );
+
     }
 
     document.getElementById('hasil').textContent =
@@ -304,22 +336,24 @@ async function copyResult(){
     const text =
     document.getElementById('hasil').textContent;
 
-    if(text === '') return;
+    if(text==='') return;
 
     await navigator.clipboard.writeText(text);
 
     const btn =
     document.getElementById('copyBtn');
 
-    const oldText = btn.innerHTML;
+    const oldText =
+    btn.innerHTML;
 
-    btn.innerHTML = '✅ Dicopy';
+    btn.innerHTML =
+    '✅ Berhasil Dicopy';
 
     setTimeout(()=>{
         btn.innerHTML = oldText;
     },2000);
 
-    showToast('📋 Berhasil dicopy');
+    showToast('📋 Hasil berhasil dicopy');
 }
 
 function clearAll(){
@@ -329,12 +363,13 @@ function clearAll(){
     document.getElementById('hasil').textContent='';
     document.getElementById('counter').textContent='Total Data : 0';
 
-    showToast('🗑 Data dihapus');
+    showToast('🗑 Data berhasil dihapus');
 }
 
 function showToast(message){
 
-    const toast = document.createElement('div');
+    const toast =
+    document.createElement('div');
 
     toast.className='toast';
     toast.innerHTML=message;
@@ -346,7 +381,8 @@ function showToast(message){
     },2000);
 }
 
-document.getElementById('bgUpload')
+document
+.getElementById('bgUpload')
 .addEventListener('change',function(e){
 
     const file = e.target.files[0];
@@ -360,7 +396,7 @@ document.getElementById('bgUpload')
         document.body.style.background =
         `url(${event.target.result}) center center/cover no-repeat fixed`;
 
-        showToast('📷 Background diganti');
+        showToast('📷 Background berhasil diganti');
     };
 
     reader.readAsDataURL(file);
