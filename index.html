@@ -6,11 +6,12 @@
 <title>Pencatatan Auto</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Consolas,monospace;
+    font-family:Consolas, monospace;
 }
 
 body{
@@ -19,7 +20,8 @@ body{
     justify-content:center;
     align-items:center;
     padding:20px;
-    background:url('https://i.pinimg.com/736x/f2/a8/a7/f2a8a7db225bdbd2edee5567e8d1da10.jpg')
+
+    background:url('https://i.pinimg.com/1200x/c1/fe/7f/c1fe7fb91e93b8c70e331bb7b736df7f.jpg')
     center center/cover no-repeat fixed;
 }
 
@@ -29,22 +31,13 @@ body{
 }
 
 .card{
-    background:rgba(107,114,128,0.95);
+    background:rgba(40,40,40,0.45);
     backdrop-filter:blur(8px);
     -webkit-backdrop-filter:blur(8px);
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:24px;
-    box-shadow:0 8px 32px rgba(0,0,0,.35);
-    overflow:hidden;
 }
 
 .header{
-    background:#4b5563;
-    color:#fff;
-    text-align:center;
-    padding:18px;
-    font-size:24px;
-    font-weight:bold;
+    background:rgba(55,55,55,0.8);
 }
 
 .content{
@@ -64,9 +57,8 @@ body{
 }
 
 h3{
-    color:#000;
+    color:#fff;
     margin-bottom:10px;
-    font-weight:bold;
 }
 
 textarea{
@@ -78,10 +70,12 @@ textarea{
     backdrop-filter:blur(5px);
     -webkit-backdrop-filter:blur(5px);
 
-    border:1px solid rgba(255,255,255,0.10);
+    border:1px solid rgba(255,255,255,.12);
+
+    color:#fff;
+
     border-radius:14px;
 
-    color:#ffffff;
     padding:15px;
 
     resize:none;
@@ -89,11 +83,11 @@ textarea{
 }
 
 textarea::placeholder{
-    color:rgba(209,213,219,0.8);
+    color:rgba(255,255,255,.55);
 }
 
 textarea:focus{
-    border-color:#111827;
+    border-color:#ff2d7a;
 }
 
 .buttons{
@@ -108,76 +102,85 @@ button{
     border-radius:12px;
     padding:12px 20px;
     cursor:pointer;
-    font-weight:bold;
     color:#fff;
+    font-weight:bold;
 }
 
 .generate{
-    background:#6b7280;
+    background:#FF8DA1;
 }
 
 .copy{
-    background:#4b5563;
+    background:#B660CD;
 }
 
 .clear{
-    background:#374151;
+    background:#ef4444;
 }
 
 .bg-btn{
     position:fixed;
     top:20px;
     right:20px;
-    background:#4b5563;
+
+    background:rgba(255,45,122,.85);
+
+    backdrop-filter:blur(10px);
+
     color:#fff;
-    border:none;
-    border-radius:12px;
-    padding:12px 18px;
-    cursor:pointer;
+
+    z-index:999;
 }
 
 .counter{
     margin-top:15px;
-    color:#000;
-    font-weight:bold;
+    color:#fff;
 }
 
 .output{
     margin-top:15px;
 
-    background:rgba(75,85,99,0.35);
+    background:rgba(255,255,255,.05);
 
     backdrop-filter:blur(5px);
     -webkit-backdrop-filter:blur(5px);
 
-    border:1px solid rgba(255,255,255,0.10);
+    border:1px solid rgba(255,255,255,.12);
 
     border-radius:14px;
+
     padding:15px;
 
     min-height:250px;
 
-    color:#f3f4f6;
+    color:#fff;
+
     white-space:pre-wrap;
+
     overflow:auto;
 }
 
 .footer{
     margin-top:15px;
     text-align:center;
-    color:#000;
-    font-weight:600;
+    color:rgba(255,255,255,.75);
 }
 
 .toast{
     position:fixed;
     bottom:20px;
     right:20px;
-    background:#374151;
+
+    background:rgba(34,197,94,.95);
+
     color:#fff;
+
     padding:12px 20px;
+
     border-radius:12px;
+
     z-index:9999;
+
     animation:fade .3s ease;
 }
 
@@ -191,6 +194,7 @@ button{
         transform:translateY(0);
     }
 }
+
 </style>
 </head>
 <body>
